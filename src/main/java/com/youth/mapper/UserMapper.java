@@ -1,4 +1,9 @@
 package com.youth.mapper;
 
-public interface UserMapper {
+
+import com.youth.Entity.User;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+public interface UserMapper extends BaseMapper<User> {
+
 }
