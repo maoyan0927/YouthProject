@@ -3,6 +3,7 @@ package com.youth.Controller;
 import com.youth.Entity.User;
 import com.youth.Response.Result;
 import com.youth.Service.UserService;
+import com.youth.Util.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,31 +24,40 @@ public class UserController {
 
     @ApiOperation("添加用户信息")
     @PostMapping("/addUser")
-    public Result add(@RequestParam("userName") String userName,
-                      @RequestParam("userPhone") String userPhone,
-                      @RequestParam("userPassword") String userPassword,
-                      @RequestParam("state") Integer state){
-        User user = new User();
-        user.setUserName(userName);
-        user.setUserPassword(userPassword);
-        user.setUserPhone(userPhone);
-        user.setState(state);
+    public R add(@RequestBody User user){
         boolean save = userService.save(user);
         if(save){
-            return Result.success("success");
+            return R.ok();
         }else{
-            return Result.success("final");
+            return R.error();
         }
     }
 
 
     @ApiOperation("所有用户列表")
     @GetMapping("/findAllUser")
-    public List<User> findAllUser(){
+    public R findAllUser(){
         List<User> list = userService.list(null);
-        System.out.println(list);
-        return list;
+        return R.ok().data("items", list);
     }
 
+
+    @ApiOperation("根据id查用户信息")
+    @GetMapping("/findUser/{userId}")
+    public R findUser(@PathVariable String userId){
+        User user = userService.getById(userId);
+        return R.ok().data("user", user);
+    }
+
+    @ApiOperation("修改用户信息")
+    @PostMapping("/updateUser")
+    public R update(@RequestBody User user){
+        boolean flag = userService.updateById(user);
+        if(flag){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
 
 }
