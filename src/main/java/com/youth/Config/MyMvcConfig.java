@@ -15,9 +15,15 @@ public class MyMvcConfig implements WebMvcConfigurer {
         //注册TestInterceptor拦截器
         InterceptorRegistration registration = registry.addInterceptor(new MyInterceptor());
         registration.addPathPatterns("/**");                      //所有路径都被拦截
-        registration.excludePathPatterns(                         //添加不拦截路径
+        registration.excludePathPatterns(
+                //添加不拦截路径
+                "/swagger-resources/**",
+                "/webjars/**",
+                "/v2/**",
+                "/swagger-ui.html/**",
                 "/",
                 "/back/**",
+                "/User/**",
                 "/login",
                 "/index",
                 "/consumerLogin",
