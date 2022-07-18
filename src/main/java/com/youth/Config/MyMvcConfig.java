@@ -24,6 +24,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
                 "/",
                 "/back/**",
                 "/User/**",
+                "/YouthInfo/**",
                 "/login",
                 "/index",
                 "/consumerLogin",

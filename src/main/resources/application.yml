@@ -10,3 +10,7 @@ spring:
     password: maoyan123
 
 
+#数据库字段的下划线转驼峰,比如数据库字段cron_id，实体类就是cronId
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
