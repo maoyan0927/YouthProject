@@ -2,7 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.youth.mapper.SlicingInfoMapper">
-
-
+    <insert id="save" parameterType="com.youth.Entity.Slicing">
+        insert into slicing_info(
+        dicom_origin_path,
+        dicom_path,
+        http_path,
+        physical_time,
+        state
+        )value (
+        #{boneDicomPath},
+        #{boneImgPath},
+        #{httpPath},
+        #{physicalTime},
+        #{state}
+        )
+        <selectKey keyColumn="slicing_id" resultType="int" keyProperty="slicingId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <select id="getSlicingByYouthId" resultType="com.youth.Entity.Slicing">
+        SELECT * FROM slicing_info WHERE slicing_info.youth_id = #{youthId}
+    </select>
 
 </mapper>

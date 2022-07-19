@@ -20,8 +20,6 @@ import java.util.List;
  * @date 2022/7/17 15:10
  */
 
-
-
 @RequestMapping("/YouthInfo")
 @RestController
 @Slf4j
@@ -132,7 +130,6 @@ public class YouthInfoController {
         long total = youthInfoPage.getTotal();//总记录数
         List<YouthInfo> records = youthInfoPage.getRecords(); //数据list集合
         return R.ok().data("total",total).data("rows",records);
-
     }
 
 }
