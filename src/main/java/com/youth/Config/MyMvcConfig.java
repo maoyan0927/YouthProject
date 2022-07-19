@@ -22,6 +22,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
                 "/v2/**",
                 "/swagger-ui.html/**",
                 "/",
+                "/auth/**",
                 "/back/**",
                 "/User/**",
                 "/YouthInfo/**",
