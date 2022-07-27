@@ -1,4 +1,7 @@
 package com.youth.Service;
 
-public interface HeightForecastService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.youth.Entity.HeightForecastResult;
+
+public interface HeightForecastService extends IService<HeightForecastResult> {
 }

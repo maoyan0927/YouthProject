@@ -1,4 +1,7 @@
 package com.youth.Service;
 
-public interface BoneageResultService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.youth.Entity.BoneageResult;
+
+public interface BoneageResultService extends IService<BoneageResult> {
 }

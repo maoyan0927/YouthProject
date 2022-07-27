@@ -25,6 +25,8 @@ public class MyMvcConfig implements WebMvcConfigurer {
                 "/back/**",
                 "/User/**",
                 "/YouthInfo/**",
+                "/Recognition/**",
+                "/slicing/**",
                 "/login",
                 "/index",
                 "/consumerLogin",
@@ -34,8 +36,6 @@ public class MyMvcConfig implements WebMvcConfigurer {
                 "recoImg",
                 "count",
                 "savedicom",
-                "slice",
-                "/file/uploadDicom",
                 "/**/*.html",            //html静态资源
                 "/**/*.js",              //js静态资源
                 "/**/*.css",             //css静态资源

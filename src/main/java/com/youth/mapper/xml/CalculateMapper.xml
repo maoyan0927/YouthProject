@@ -2,7 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.youth.mapper.CalculateMapper">
+    <!--计算总分-->
+    <select id="selectScoreBySexAndNameRanks" parameterType="Map" resultType="java.lang.Integer">
+        SELECT SUM(score) FROM db_calculate_bone_score_chn_type WHERE sex = #{sex} AND name_rank IN
+        <foreach collection="nameRanks" item="nameRank" index="index" open="(" close=")" separator=",">
+            #{nameRank}
+        </foreach>
+    </select>
+    <!--根据性别和各个骨头的等级获取单个分数chn-->
+    <select id="selectScoreBySexAndNameRank" parameterType="map" resultType="java.lang.Integer">
+        SELECT score
+        FROM db_calculate_bone_score_chn_type
+        WHERE sex = #{sex} and name_rank = #{nameRank}
+    </select>
+    <!--根据性别和各个骨头的等级获取单个分数-->
+    <select id="selectScoreBySexAndRanks" parameterType="map" resultType="java.lang.Integer">
+        SELECT score
+        FROM db_calculate_bone_score_chn_type
+        WHERE sex = #{sex} and bone_rank = #{rank} and bone_name = #{bonename}
+    </select>
+    <!--计算骨龄chn-->
+    <select id="selectBoneAgeBySexAndScore" parameterType="Map" resultType="java.lang.Double">
+        SELECT MIN(bone_age) FROM db_calculate_bone_age WHERE sex = #{sex} AND score >= #{score}
+    </select>
 
 
+    <!--根据性别和各个骨头的等级获取单个分数(tw3)-->
+    <select id="selectTw3ScoreBySexAndNameRank" parameterType="map" resultType="java.lang.Integer">
+        SELECT score
+        FROM db_calculate_bone_score_tw3_type
+        WHERE sex = #{sex} and name_rank = #{nameRank}
+    </select>
+    <!--计算骨龄(tw3)-->
+    <select id="selectTw3BoneAgeBySexAndScore" parameterType="Map" resultType="java.lang.Double">
+        SELECT MIN(bone_age) FROM db_calculate_bone_age_tw3 WHERE sex = #{sex} AND score >= #{score}
+    </select>
+    <!--计算骨龄(twc)-->
+    <select id="selectTwcBoneAgeBySexAndScore" parameterType="Map" resultType="java.lang.Double">
+        SELECT MIN(bone_age) FROM db_calculate_bone_age_twc WHERE sex = #{sex} AND score >= #{score}
+    </select>
 
 </mapper>
