@@ -17,6 +17,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
         registration.addPathPatterns("/**");                      //所有路径都被拦截
         registration.excludePathPatterns(
                 //添加不拦截路径
+                "/websocket/**",
                 "/swagger-resources/**",
                 "/webjars/**",
                 "/v2/**",
