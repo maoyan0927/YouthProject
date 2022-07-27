@@ -43,6 +43,30 @@ public class R {
         return r;
     }
 
+    public static R slicingError(){
+        R r = new R();
+        r.setSuccess(false);
+        r.setCode(ResultCode.SlicingERROR);
+        r.setMessage("切割请求失败");
+        return r;
+    }
+
+    public static R RecognitionError(){
+        R r = new R();
+        r.setSuccess(false);
+        r.setCode(ResultCode.RecognitionERROR);
+        r.setMessage("识别接口请求失败");
+        return r;
+    }
+
+    public static R HeightError(){
+        R r = new R();
+        r.setSuccess(false);
+        r.setCode(ResultCode.HeightERROR);
+        r.setMessage("身高接口请求失败");
+        return r;
+    }
+
     public R success(Boolean success){
         this.setSuccess(success);
         return this;

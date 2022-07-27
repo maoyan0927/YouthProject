@@ -3,6 +3,16 @@
 
 <mapper namespace="com.youth.mapper.RecognitionMapper">
 
-
+    <insert id="add" parameterType="com.youth.Entity.RecognitionResult">
+        insert into db_bone_img_recognization(
+        slicing_id,rao_rank,chi_rank,tou_rank,gou_rank,zhang1_rank,zhang3_rank,zhang5_rank,jin1_rank,
+        jin3_rank,jin5_rank,zhong3_rank,zhong5_rank,yuan1_rank,yuan3_rank,yuan5_rank,kind,state
+        )value (#{slicingId},#{raoRank},#{chiRank},#{touRank},#{gouRank},#{zhang1Rank},#{zhang3Rank},#{zhang5Rank},
+        #{jin1Rank},#{jin3Rank},#{jin5Rank},#{zhong3Rank},#{zhong5Rank},#{yuan1Rank},#{yuan3Rank},#{yuan5Rank},#{kind},#{state}
+        )
+        <selectKey keyColumn="reco_result_id" resultType="int" keyProperty="recoResultId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
 
 </mapper>

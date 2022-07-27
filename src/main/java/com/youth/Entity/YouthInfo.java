@@ -35,7 +35,7 @@ public class YouthInfo implements Serializable {
     private String youthNation;
 
     @ApiModelProperty("孩童出生日期")
-    private String youthBirth;
+    private Date youthBirth;
 
     @ApiModelProperty("孩童身份证")
     private String youthCardId;
