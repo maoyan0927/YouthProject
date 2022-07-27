@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    User getUserInfoByUserPhone(String userPhone);
+   User getUserInfoByUserPhone(String userPhone);
 }

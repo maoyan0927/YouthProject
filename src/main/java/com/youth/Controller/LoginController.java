@@ -44,7 +44,7 @@ public class LoginController {
             }
         }else if (loginForm.getRole()==2){
             //TODO:读专家表
-//            ExpertInfo expertInfo = expertInfoService.getExpertInfoByExpertPhone(loginForm.getUserPhone());
+//            ExpertInfo expertInfo = expertInfoService.getExpertInfoByPhone(loginForm.getUserPhone());
 //            if (loginForm.getUserPassword().equals(expertInfo.getExpertPassword())){//登录成功
 //                return R.ok().data("expertInfo",expertInfo);
 //            }else {
