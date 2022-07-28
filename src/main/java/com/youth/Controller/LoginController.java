@@ -39,6 +39,7 @@ public class LoginController {
         }else if (loginForm.getRole()==2){
             ExpertInfo expertInfo = loginService.getExpertInfoByPhone(loginForm.getUserPhone());
             if (loginForm.getUserPassword().equals(expertInfo.getExpertPassword())){//登录成功
+                expertInfo.setExpertPassword("");
                 return R.ok().data("expertInfo",expertInfo).data("userKind",2);
             }else {
                 return R.error().message("手机号或密码错误！");
