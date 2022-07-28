@@ -2,6 +2,7 @@ package com.youth.Controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youth.Entity.Slicing;
+import com.youth.Entity.YouthInfo;
 import com.youth.Service.SlicingInfoService;
 import com.youth.Util.EnDecoderUtil;
 import com.youth.Util.R;
@@ -45,6 +46,13 @@ public class SlicingController {
         }else{
             return R.error();
         }
+    }
+
+    @ApiOperation("所有图片列表")
+    @GetMapping("/findAllSlicing")
+    public R findAllSlicing(){
+        List<Slicing> list = slicingInfoService.list(null);
+        return R.ok().data("items", list);
     }
 
     /***

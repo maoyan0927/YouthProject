@@ -2,13 +2,14 @@ package com.youth.Entity;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
 public class Curve {
-    private Float bp;
-    private Float bp2;
-    private Float target;
+    private Double bp;
+    private Double bp2;
+    private Double target;
     private String heightEvaluate;
 
     private List<List<Float>> points;

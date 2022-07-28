@@ -30,6 +30,8 @@ public class BoneageResult implements Serializable {
 
     private Double tw3Boneage;
 
+    private Double twcBoneage;
+
     private String situation;
 
     private String expertSuggestion;

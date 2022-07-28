@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.youth.mapper.HeightForecastMapper">
-
+    <select id="getHeightByRecoId" resultType="com.youth.Entity.HeightForecastResult">
+        SELECT * FROM height_forecast_result WHERE height_forecast_result.reco_result_id = #{recoId}
+    </select>
 
 
 </mapper>
