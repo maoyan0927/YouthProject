@@ -15,8 +15,13 @@ public class IServiceTest {
 
     @Test
     void test1() throws Exception{
-        ExpertInfo expertInfo = expertInfoService.getById(1);
-        System.out.println(expertInfo);
+        ExpertInfo expertInfo = new ExpertInfo();
+        expertInfo.setExpertName("test1");
+        expertInfo.setExpertPassword("test1");
+        expertInfo.setExpertPhone("test1");
+        expertInfo.setState(1);
+        boolean save = expertInfoService.save(expertInfo);
+        System.out.println(save);
 
     }
 
