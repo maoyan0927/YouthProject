@@ -1,5 +1,6 @@
 package com.youth.Entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -19,7 +20,7 @@ public class RecognitionResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("识别结果id")
-    @TableId(value = "reco_result_id")
+    @TableId(value = "reco_result_id",type = IdType.AUTO)
     private Integer recoResultId;
 
     @ApiModelProperty("切割id")

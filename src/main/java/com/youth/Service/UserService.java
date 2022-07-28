@@ -12,4 +12,6 @@ public interface UserService extends IService<User> {
 
     User getUserInfoByUserPhone(String userPhone);
 
+    Boolean addUser(User user);
+
 }
