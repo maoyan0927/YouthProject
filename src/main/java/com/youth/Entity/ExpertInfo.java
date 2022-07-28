@@ -1,9 +1,6 @@
 package com.youth.Entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,7 +19,7 @@ public class ExpertInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("专家id")
-    @TableId(value = "expert_id")
+    @TableId(value = "expert_id",type = IdType.AUTO)
     private Integer expertId;
 
     @ApiModelProperty("专家姓名")
@@ -33,6 +30,12 @@ public class ExpertInfo implements Serializable {
 
     @ApiModelProperty("专家密码")
     private String expertPassword;
+
+    @ApiModelProperty("专家职称")
+    private String expertTitle;
+
+    @ApiModelProperty("专家单位")
+    private String expertUnit;
 
     @ApiModelProperty("创建时间")
     @TableField(fill = FieldFill.INSERT)

@@ -39,7 +39,6 @@ public class AdminInfo implements Serializable {
     private String adminName;
 
     @ApiModelProperty("创建时间")
-    //TODO: 创建自动填充处理器？https://blog.csdn.net/weixin_42526068/article/details/113039510
     @TableField(fill = FieldFill.INSERT,value = "create_time")
     private Date createTime;
 
