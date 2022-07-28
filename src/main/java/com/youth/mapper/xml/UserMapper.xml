@@ -13,6 +13,8 @@
         <result column="state" property="state" jdbcType="INTEGER"/>
     </resultMap>
 
-
+    <select id="getUserInfoByUserPhone" resultType="com.youth.Entity.User">
+        SELECT * FROM user_info WHERE user_info.user_phone = #{userPhone}
+    </select>
 
 </mapper>
