@@ -3,15 +3,15 @@
 
 <mapper namespace="com.youth.mapper.UserMapper">
 
-    <resultMap id="UserResultMap" type="com.youth.Entity.User">
-        <id column="user_id" property="consumerId" jdbcType="INTEGER"/>
-        <result column="user_name" property="consumerName" jdbcType="VARCHAR"/>
-        <result column="user_phone" property="consumerPhone" jdbcType="VARCHAR"/>
-        <result column="password" property="password" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="state" property="state" jdbcType="INTEGER"/>
-    </resultMap>
+<!--    <resultMap id="UserResultMap" type="com.youth.Entity.User">-->
+<!--        <id column="user_id" property="consumerId" jdbcType="INTEGER"/>-->
+<!--        <result column="user_name" property="consumerName" jdbcType="VARCHAR"/>-->
+<!--        <result column="user_phone" property="consumerPhone" jdbcType="VARCHAR"/>-->
+<!--        <result column="password" property="password" jdbcType="VARCHAR"/>-->
+<!--        <result column="create_time" property="createTime" jdbcType="DATE"/>-->
+<!--        <result column="update_time" property="updateTime" jdbcType="DATE"/>-->
+<!--        <result column="state" property="state" jdbcType="INTEGER"/>-->
+<!--    </resultMap>-->
 
     <select id="getUserInfoByUserPhone" resultType="com.youth.Entity.User">
         SELECT * FROM user_info WHERE user_info.user_phone = #{userPhone}

@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.youth.mapper.ExpertInfoMapper">
-    <resultMap id="ExpertInfoResultMap" type="com.youth.Entity.ExpertInfo">
-        <id column="expert_id" property="expertId" jdbcType="INTEGER"/>
-        <result column="expert_name" property="expertName" jdbcType="VARCHAR"/>
-        <result column="expert_title" property="expertTitle" jdbcType="VARCHAR"/>
-        <result column="expert_unit" property="expertUnit" jdbcType="VARCHAR"/>
-        <result column="expert_password" property="expertPassword" jdbcType="VARCHAR"/>
-        <result column="expert_phone" property="expertPhone" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="DATETIME"/>
-        <result column="update_time" property="updateTime" jdbcType="DATETIME"/>
-        <result column="state" property="state" jdbcType="INTEGER"/>
-    </resultMap>
+<!--    <resultMap id="ExpertInfoResultMap" type="com.youth.Entity.ExpertInfo">-->
+<!--        <id column="expert_id" property="expertId" jdbcType="INTEGER"/>-->
+<!--        <result column="expert_name" property="expertName" jdbcType="VARCHAR"/>-->
+<!--        <result column="expert_title" property="expertTitle" jdbcType="VARCHAR"/>-->
+<!--        <result column="expert_unit" property="expertUnit" jdbcType="VARCHAR"/>-->
+<!--        <result column="expert_password" property="expertPassword" jdbcType="VARCHAR"/>-->
+<!--        <result column="expert_phone" property="expertPhone" jdbcType="VARCHAR"/>-->
+<!--        <result column="create_time" property="createTime" jdbcType="DATE"/>-->
+<!--        <result column="update_time" property="updateTime" jdbcType="DATE"/>-->
+<!--        <result column="state" property="state" jdbcType="INTEGER"/>-->
+<!--    </resultMap>-->
 
     <select id="getExpertInfoByPhone" resultType="com.youth.Entity.ExpertInfo">
         SELECT * FROM expert_info WHERE expert_info.expert_phone = #{phone}
