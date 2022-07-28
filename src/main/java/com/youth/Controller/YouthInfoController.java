@@ -44,7 +44,7 @@ public class YouthInfoController {
 
     @ApiOperation("所有孩童列表")
     @GetMapping("/findAllYouthInfo")
-    public R findAllUser(){
+    public R findAllYouthInfo(){
         List<YouthInfo> list = youthInfoService.list(null);
         return R.ok().data("items", list);
     }

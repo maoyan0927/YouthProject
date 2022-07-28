@@ -42,7 +42,15 @@ public class RecognitionController {
     @Autowired
     YouthInfoService youthInfoService;
 
+    @ApiOperation("所有识别列表")
+    @GetMapping("/findAllRecognition")
+    public R findAllRecognition(){
+        List<RecognitionResult> list = recognitionService.list(null);
+        return R.ok().data("items", list);
+    }
 
+
+    @ApiOperation("识别算法")
     @PostMapping(value = "/analysis")
     public R analysis(@RequestBody AnalysisParm analysisParm) {
         Map<String, Object> resMap = new HashMap<>();

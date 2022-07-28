@@ -8,6 +8,7 @@ import com.youth.Entity.vo.CutEntity;
 import com.youth.Entity.vo.HeightEntity;
 import com.youth.Entity.vo.RecoEntity;
 import com.youth.Service.*;
+import com.youth.Util.EnDecoderUtil;
 import com.youth.Util.HttpAPIUtil;
 import com.youth.Util.ResultEnum;
 import com.youth.Util.StringUtil;
@@ -16,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -54,6 +55,9 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
     @Value("${url.heightplot}")
     String heightPlotUrl;
 
+    @Value("${des.key}")
+    String key;
+
     @Override
     public int add(RecognitionResult RecognitionResult) {
         int result = recognitionMapper.add(RecognitionResult);
@@ -76,6 +80,10 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
         return ResultEnum.DEFAULT_ERROR;
     }
 
+    @Override
+    public List<RecognitionResult> getRecognitionBySlicingId(Integer slicingId) {
+        return recognitionMapper.getRecognitionBySlicingId(slicingId);
+    }
 
     private ResultEnum getSlicePathAndSql(Integer slicingId, Double height, Double weight, Integer youthId) {
         try{
@@ -253,6 +261,63 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
             e.printStackTrace();
         }
         return ResultEnum.DEFAULT_ERROR;
+    }
+
+    private ReportInfo getReport(String sliceId, Model model) {
+        try {
+            int type = 1;
+            byte[] byteStr = Base64.getDecoder().decode(sliceId);
+            byte[] decode_bytes = EnDecoderUtil.DESDecrypt(key, byteStr);
+            Integer sliceIdInt = Integer.parseInt(new String(decode_bytes));
+            ReportInfo report = new ReportInfo();
+            Slicing slice = slicingInfoService.getById(sliceIdInt);
+            if (slice != null) {
+                if (slice.getState() >= 4) {
+                    type = 2;
+                }
+                report.setWeight(slice.getYouthWeight());
+                report.setHeight(slice.getYouthHeight());
+                report.setCheckDate(slice.getPhysicalTime());
+                Integer youthId = slice.getYouthId();
+                YouthInfo youthInfo = youthInfoService.getById(youthId);
+                List<RecognitionResult> recoList = getRecognitionBySlicingId(sliceIdInt);
+                if (youthInfo != null && recoList.size() > 0) {
+                    String sexArray[] = {"男", "女"};
+                    report.setName(youthInfo.getYouthName());
+                    report.setSex(sexArray[youthInfo.getYouthSex()]);
+                    report.setBirth(youthInfo.getYouthBirth());
+                    report.setSlicingId(StringUtil.encryption(slice.getSlicingId()));
+                    report.setAge(StringUtil.getAge(youthInfo.getYouthBirth(), slice.getPhysicalTime()).doubleValue());
+                    report.setState(slice.getState());
+                    for (RecognitionResult recognization : recoList) {
+                        Integer recoId = recognization.getRecoResultId();
+                        BoneageResult boneageResult = boneageResultService.getBoneageByRecoId(recoId);
+                        HeightForecastResult heightInfo = heightForecastService.getHeightByRecoId(recoId);
+                        List<List<Float>> point = StringUtil.stringToArray(heightInfo!=null?heightInfo.getGrowthTrend():null);
+                        //recog kind=1 ai kind=2 expert
+                        if (recognization.getKind() == type) {
+                            report.setChnBoneAge(boneageResult.getChnBoneage());
+                            report.setTw3BoneAge(boneageResult.getTw3Boneage());
+                            report.setTwcBoneAge(boneageResult.getTwcBoneage());
+                            report.getCurveChn().setBp(heightInfo!=null?heightInfo.getFinalHeightBp():null);
+                            report.getCurveChn().setBp2(heightInfo!=null?heightInfo.getFinalHeightImprove():null);
+                            report.getCurveChn().setTarget(heightInfo!=null?heightInfo.getGeneticHeight():null);
+                            report.getCurveChn().setPoints(point);
+                            report.getCurveChn().setHeightEvaluate(heightInfo!=null?heightInfo.getEvaluate():null);//身高评价
+                            report.setWholeAgeGrowth(boneageResult.getSituation());//骨龄评价
+                            report.setExpertSuggest(boneageResult.getExpertSuggestion());//专家建议
+                            if (model != null) {
+                                model.addAttribute("recogStr", StringUtil.encryption(recognization.getRecoResultId()));
+                            }
+                        }
+                    }
+                    return report;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
