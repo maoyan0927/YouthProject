@@ -56,6 +56,18 @@ public class YouthInfoController {
         }
     }
 
+    @ApiOperation("修改孩童信息")
+    @PutMapping("/updateYouthInfo")
+    public R update(@RequestBody YouthInfo youthInfo){
+        System.out.println(youthInfo);
+        boolean flag = youthInfoService.updateById(youthInfo);
+        if(flag){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
+
 
     @ApiOperation("所有孩童列表")
     @GetMapping("/findAllYouthInfo")
@@ -72,16 +84,6 @@ public class YouthInfoController {
         return R.ok().data("youthInfo", youthInfo);
     }
 
-    @ApiOperation("修改用户信息")
-    @PostMapping("/updateYouthInfo")
-    public R update(@RequestBody YouthInfo youthInfo){
-        boolean flag = youthInfoService.updateById(youthInfo);
-        if(flag){
-            return R.ok();
-        }else{
-            return R.error();
-        }
-    }
 
     @ApiOperation("根据用户信息查询所有孩童信息")
     @GetMapping("/findYouthInfoByUserId/{userId}")
