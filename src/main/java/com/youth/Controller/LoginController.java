@@ -1,6 +1,7 @@
 package com.youth.Controller;
 
 import cn.hutool.json.JSON;
+import com.youth.Entity.AdminInfo;
 import com.youth.Entity.ExpertInfo;
 import com.youth.Entity.User;
 import com.youth.Entity.YouthInfo;
@@ -46,9 +47,15 @@ public class LoginController {
             }
         }else if (loginForm.getRole()==3){
             //TODO:读管理员表
-            return R.ok().data("userKind",3);
+            AdminInfo adminInfo = loginService.getAdminInfoByAccount(loginForm.getUserPhone());
+            if (loginForm.getUserPhone().equals(adminInfo.getAdminAccount())){
+                adminInfo.setAdminPassword("");
+                return R.ok().data("adminInfo",adminInfo).data("userKind",3);
+            }else {
+                return R.error().message("手机号或密码错误！");
+            }
         }
-        return R.error();
+        return R.error().message("登录身份出错！");
     }
 
 }

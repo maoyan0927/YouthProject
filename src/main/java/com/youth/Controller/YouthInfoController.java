@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,8 +35,33 @@ public class YouthInfoController {
     @ApiOperation("添加孩童信息")
     @PostMapping("/addYouthInfo")
     public R add(@RequestBody YouthInfo youthInfo){
+        System.out.println(youthInfo);
+        youthInfo.setCreateTime(new Date());
         boolean save = youthInfoService.save(youthInfo);
         if(save){
+            return R.ok().message("添加成功");
+        }else{
+            return R.error();
+        }
+    }
+
+    @ApiOperation("删除孩童信息")
+    @DeleteMapping("/deleteYouthInfo/{youthId}")
+    public R delete(@PathVariable int youthId){
+        Boolean aBoolean = youthInfoService.deleteYouthInfoByYouthId(youthId);
+        if(aBoolean){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
+
+    @ApiOperation("修改孩童信息")
+    @PutMapping("/updateYouthInfo")
+    public R update(@RequestBody YouthInfo youthInfo){
+        System.out.println(youthInfo);
+        boolean flag = youthInfoService.updateById(youthInfo);
+        if(flag){
             return R.ok();
         }else{
             return R.error();
@@ -51,25 +78,15 @@ public class YouthInfoController {
 
 
     @ApiOperation("根据孩童id查孩童信息")
-    @GetMapping("/findyouthInfo/{youthInfoId}")
+    @GetMapping("/findYouthInfoByYouthInfoId/{youthInfoId}")
     public R findYouthInfo(@PathVariable Integer youthInfoId){
         YouthInfo youthInfo = youthInfoService.getById(youthInfoId);
         return R.ok().data("youthInfo", youthInfo);
     }
 
-    @ApiOperation("修改用户信息")
-    @PostMapping("/updateYouthInfo")
-    public R update(@RequestBody YouthInfo youthInfo){
-        boolean flag = youthInfoService.updateById(youthInfo);
-        if(flag){
-            return R.ok();
-        }else{
-            return R.error();
-        }
-    }
 
     @ApiOperation("根据用户信息查询所有孩童信息")
-    @GetMapping("/findYouthInfo/{userId}")
+    @GetMapping("/findYouthInfoByUserId/{userId}")
     public R findYouthInfoByUserId(@PathVariable Integer userId){
         List<YouthInfo> youthInfolist = youthInfoService.getYouthInfoByUserId(userId);
         return R.ok().data("items", youthInfolist);

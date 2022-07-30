@@ -1,5 +1,6 @@
 package com.youth.Entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -19,7 +20,7 @@ public class HeightForecastResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("身高预测结果id")
-    @TableId(value = "height_forecast_id")
+    @TableId(value = "height_forecast_id",type = IdType.AUTO)
     private Integer heightForecastId;
 
     private Integer recoResultId;

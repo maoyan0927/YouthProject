@@ -8,4 +8,6 @@ import java.util.List;
 public interface YouthInfoService extends IService<YouthInfo> {
 
     List<YouthInfo> getYouthInfoByUserId(Integer userId);
+    YouthInfo getYouthInfoByCardId(String cardId);
+    Boolean deleteYouthInfoByYouthId(int youthId);
 }

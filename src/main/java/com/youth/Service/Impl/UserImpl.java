@@ -16,4 +16,9 @@ public class UserImpl extends ServiceImpl<UserMapper, User> implements UserServi
     public User getUserInfoByUserPhone(String userPhone){
         return userMapper.getUserInfoByUserPhone(userPhone);
     }
+
+    @Override
+    public Boolean addUser(User user) {
+        return this.save(user);
+    }
 }

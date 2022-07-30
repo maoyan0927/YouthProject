@@ -1,5 +1,6 @@
 package com.youth.Service.Impl;
 
+import com.youth.Entity.AdminInfo;
 import com.youth.Entity.ExpertInfo;
 import com.youth.Entity.User;
 import com.youth.Service.AdminInfoService;
@@ -15,8 +16,8 @@ public class LoginServiceImpl implements LoginService {
     UserService userService;
     @Autowired
     ExpertInfoService expertInfoService;
-//    @Autowired
-//    AdminInfoService adminInfoService;
+    @Autowired
+    AdminInfoService adminInfoService;
     @Override
     public ExpertInfo getExpertInfoByPhone(String phone) {
         return expertInfoService.getExpertInfoByPhone(phone);
@@ -25,5 +26,10 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public User getUserInfoByUserPhone(String userPhone) {
         return userService.getUserInfoByUserPhone(userPhone);
+    }
+
+    @Override
+    public AdminInfo getAdminInfoByAccount(String account) {
+        return adminInfoService.getAdminInfoByAccount(account);
     }
 }

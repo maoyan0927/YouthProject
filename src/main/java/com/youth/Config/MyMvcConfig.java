@@ -33,7 +33,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
                 "/index",
                 "/consumerLogin",
                 "/consumerRegister",
-                "/register",
+                "/register/**",
                 "/calculate",
                 "/heightplot",
                 "recoImg",
