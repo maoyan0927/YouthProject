@@ -28,7 +28,7 @@ public class YouthInfo implements Serializable {
     @ApiModelProperty("孩童性别")
     private Integer youthSex;
 
-    @ApiModelProperty("孩童名族")
+    @ApiModelProperty("孩童民族")
     private String youthNation;
 
     @ApiModelProperty("孩童出生日期")
