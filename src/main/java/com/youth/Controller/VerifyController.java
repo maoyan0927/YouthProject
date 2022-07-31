@@ -3,6 +3,7 @@ package com.youth.Controller;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -12,5 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "专家验证类")
 @CrossOrigin
 public class VerifyController {
+
+    @Autowired
+    private CalculateController calculateController;
+
 
 }
