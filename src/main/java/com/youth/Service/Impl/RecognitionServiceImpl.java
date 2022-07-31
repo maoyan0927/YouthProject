@@ -183,7 +183,7 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
                             boneageResult.setRecoResultId(recoId);
                             boneageResult.setChnBoneage(recoEntity.getData().getChnBoneage());
                             boneageResult.setTw3Boneage(recoEntity.getData().getTw3Boneage());
-//                            boneageResult.setTwcBoneage(recoEntity.getData().getTwcBoneage());
+                            boneageResult.setTwcBoneage(recoEntity.getData().getTwcBoneage());
                             boneageResult.setSituation(recoEntity.getData().getSituation());
                             boneageResult.setState(0);
                             boolean save = boneageResultService.save(boneageResult);

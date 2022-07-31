@@ -84,7 +84,7 @@ public class CalcuateServiceImpl implements CalculateService {
     }
 
     @Override
-    public int getChnBoneScore(Integer sex, float score) {
+    public Double getChnBoneScore(Integer sex, float score) {
         return calculateMapper.getBoneScore(sex,score);
     }
 
@@ -166,12 +166,12 @@ public class CalcuateServiceImpl implements CalculateService {
     }
 
     @Override
-    public int getTw3BoneScore(Integer sex, float score) {
+    public Double getTw3BoneScore(Integer sex, float score) {
         return calculateMapper.getTw3BoneScore(sex,score);
     }
 
     @Override
-    public int getTwcBoneScore(Integer sex, float score) {
+    public Double getTwcBoneScore(Integer sex, float score) {
         return calculateMapper.getTwcBoneScore(sex, score);
     }
 
