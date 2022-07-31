@@ -12,7 +12,7 @@ public interface CalculateMapper {
     /*
        获取分数（chn）
     */
-    int getBoneScore(Integer sex, float score);
+    Double getBoneScore(Integer sex, float score);
     /*
       根据骨龄和14块骨头获取分数
    */
@@ -20,8 +20,8 @@ public interface CalculateMapper {
     /*
        获取分数
     */
-    int getTw3BoneScore(Integer sex, float score);
+    Double getTw3BoneScore(Integer sex, float score);
 
 
-    int getTwcBoneScore(Integer sex, float score);
+    Double getTwcBoneScore(Integer sex, float score);
 }

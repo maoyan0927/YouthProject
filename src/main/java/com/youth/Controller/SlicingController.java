@@ -6,14 +6,17 @@ import com.youth.Entity.YouthInfo;
 import com.youth.Service.SlicingInfoService;
 import com.youth.Util.EnDecoderUtil;
 import com.youth.Util.R;
+import com.youth.Util.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +89,25 @@ public class SlicingController {
             e.printStackTrace();
         }
         return R.ok().data("resMap",resMap);
+    }
+
+    @ApiOperation("删除图片信息")
+    @GetMapping("/file/deleteDicom")
+    public R deleteBySlicingId(@PathVariable Integer slicingId){
+        Slicing slicing = slicingInfoService.getById(slicingId);
+        String dicomUrl = slicing.getDicomPath();
+        //此处路径需要更新
+        File file = new File(dicomUrl);
+        Boolean deleteFile = slicingInfoService.deleteFile(file);
+        if (!deleteFile){
+            return R.deleteDicomError();
+        }
+        boolean removeById = slicingInfoService.removeById(slicingId);
+        if (!removeById){
+            return R.ok();
+        }else{
+            return R.error();
+        }
     }
 
     @ApiOperation("分页查询切片信息")

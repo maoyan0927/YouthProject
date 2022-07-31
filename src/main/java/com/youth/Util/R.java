@@ -67,6 +67,14 @@ public class R {
         return r;
     }
 
+    public static R deleteDicomError(){
+        R r = new R();
+        r.setSuccess(false);
+        r.setCode(ResultCode.DeleteDicom);
+        r.setMessage("删除图片失败");
+        return r;
+    }
+
     public R success(Boolean success){
         this.setSuccess(success);
         return this;

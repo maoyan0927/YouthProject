@@ -6,6 +6,8 @@ public interface ResultCode {
 
     public static Integer ERROR = 20001; //失败
 
+    public static Integer DeleteDicom = 20005; //删除图片失败
+
     public static Integer SlicingERROR = 20002; //切割失败
 
     public static Integer RecognitionERROR = 20003; //识别失败
