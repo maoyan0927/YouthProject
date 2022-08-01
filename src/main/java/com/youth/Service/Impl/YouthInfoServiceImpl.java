@@ -34,7 +34,7 @@ public class YouthInfoServiceImpl extends ServiceImpl<YouthInfoMapper, YouthInfo
     public List<YouthInfo> getYouthInfoByYouthNameAndUserId(String youthName ,int userId) {
         if(!StringUtils.isEmpty(youthName)) {
             //构建条件
-            queryWrapper.like("youth_name",youthName);
+            queryWrapper.like("youth_name","%"+youthName+"%");
             queryWrapper.eq("user_id",userId);
             return this.list(queryWrapper);
         }
