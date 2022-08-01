@@ -175,7 +175,6 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
                         recognization.setKind(1); //ai
                         recognization.setState(0);
                         int recoId = add(recognization);
-
                         if (recoId > 0){
                             log.debug("识别信息入库成功");
                             //分值入库

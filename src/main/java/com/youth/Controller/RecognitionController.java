@@ -96,5 +96,16 @@ public class RecognitionController {
         return R.ok().data("total",total).data("rows",records);
     }
 
+    @ApiOperation("根据id查询识别记录")
+    @GetMapping("/findRecognitionById/{recoId}")
+    public R findRecognitionById(@PathVariable Integer recoId){
+        RecognitionResult recognitionResult = recognitionService.getById(recoId);
+        if(recognitionResult!=null){
+            return R.ok().data("recognitionResult", recognitionResult);
+        }else{
+            return R.error();
+        }
+    }
+
 
 }
