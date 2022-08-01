@@ -2,7 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.youth.mapper.TaskInfoMapper">
-
+    <update id="update" parameterType="com.youth.Entity.TaskInfo">
+        update task_info
+        <set>
+            expert_id = #{expertId},
+            state = #{state}
+        </set>
+        where task_id = #{taskId}
+    </update>
 
 
 </mapper>
