@@ -8,6 +8,7 @@ import com.youth.Service.YouthInfoService;
 import com.youth.mapper.YouthInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -15,19 +16,29 @@ import java.util.List;
 public class YouthInfoServiceImpl extends ServiceImpl<YouthInfoMapper, YouthInfo> implements YouthInfoService {
     @Autowired
     private YouthInfoMapper youthInfoMapper;
+    QueryWrapper<YouthInfo> queryWrapper = new QueryWrapper<>();
 
     @Override
     public List<YouthInfo> getYouthInfoByUserId(Integer userId) {
-        List<YouthInfo> list = youthInfoMapper.getYouthInfoByUserId(userId);
-        return list;
+        return youthInfoMapper.getYouthInfoByUserId(userId);
     }
 
     @Override
     public YouthInfo getYouthInfoByCardId(String cardId) {
-        QueryWrapper<YouthInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("youth_card_id",cardId);
         queryWrapper.last("LIMIT 1");
         return this.getOne(queryWrapper);
+    }
+
+    @Override
+    public List<YouthInfo> getYouthInfoByYouthNameAndUserId(String youthName ,int userId) {
+        if(!StringUtils.isEmpty(youthName)) {
+            //构建条件
+            queryWrapper.like("youth_name",youthName);
+            queryWrapper.eq("user_id",userId);
+            return this.list(queryWrapper);
+        }
+        return null;
     }
 
     @Override

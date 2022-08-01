@@ -68,6 +68,14 @@ public class YouthInfoController {
         }
     }
 
+    @ApiOperation("根据孩子姓名和用户Id查找孩童信息")
+    @GetMapping("/findYouthInfoByYouthNameAndUserId/{youthName}/{userId}")
+    public R findYouthInfoByYouthNameAndUserId(@PathVariable String youthName,
+                                      @PathVariable int userId){
+        List<YouthInfo> list = youthInfoService.getYouthInfoByYouthNameAndUserId(youthName,userId);
+        return R.ok().data("items", list);
+    }
+
 
     @ApiOperation("所有孩童列表")
     @GetMapping("/findAllYouthInfo")
