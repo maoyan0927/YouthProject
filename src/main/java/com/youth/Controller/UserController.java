@@ -72,6 +72,38 @@ public class UserController {
         }
     }
 
+    @ApiOperation("条件查询用户信息")
+    @PostMapping("/searchUser")
+    public R searchUser(@RequestBody UserQuery userQuery){
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        String name = userQuery.getUserName();
+        String phone = userQuery.getUserPhone();
+        String begin = userQuery.getBegin();
+        String end = userQuery.getEnd();
+        //判断条件，进行拼接
+        if(!StringUtils.isEmpty(name)) {
+            //构建条件
+            wrapper.like("user_name","%"+name+"%");
+        }
+        if(!StringUtils.isEmpty(phone)) {
+            //构建条件
+            wrapper.eq("user_phone",phone);
+        }
+        if(!StringUtils.isEmpty(begin)) {
+            wrapper.ge("create_time",begin);
+        }
+        if(!StringUtils.isEmpty(end)) {
+            wrapper.le("create_time",end);
+        }
+
+        //排序
+        wrapper.orderByDesc("update_time");
+        List<User> list = userService.list(wrapper); //数据list集合
+        return R.ok().data("items",list);
+
+    }
+
+
     @ApiOperation("分页查询用户信息")
     @GetMapping("/pageUser/{current}/{limit}")
     public R pageListUser(@PathVariable long current,

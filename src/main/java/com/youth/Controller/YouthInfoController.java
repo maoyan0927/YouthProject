@@ -110,7 +110,7 @@ public class YouthInfoController {
         }
 
         //排序
-        wrapper.orderByDesc("create_time");
+        wrapper.orderByDesc("update_time");
         List<YouthInfo> list = youthInfoService.list(wrapper);
         return R.ok().data("items", list);
     }
@@ -119,7 +119,9 @@ public class YouthInfoController {
     @ApiOperation("所有孩童列表")
     @GetMapping("/findAllYouthInfo")
     public R findAllYouthInfo(){
-        List<YouthInfo> list = youthInfoService.list(null);
+        QueryWrapper<YouthInfo> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("update_time");
+        List<YouthInfo> list = youthInfoService.list(wrapper);
         return R.ok().data("items", list);
     }
 
@@ -186,7 +188,7 @@ public class YouthInfoController {
         }
 
         //排序
-        wrapper.orderByDesc("create_time");
+        wrapper.orderByDesc("update_time");
 
         //调用方法实现条件查询分页
         youthInfoService.page(youthInfoPage,wrapper);
