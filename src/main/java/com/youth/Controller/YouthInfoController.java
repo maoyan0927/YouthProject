@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -68,11 +69,59 @@ public class YouthInfoController {
         }
     }
 
+    @ApiOperation("根据孩子姓名和用户Id查找孩童信息")
+    @GetMapping("/findYouthInfoByYouthNameAndUserId/{youthName}/{userId}")
+    public R findYouthInfoByYouthNameAndUserId(@PathVariable String youthName,
+                                      @PathVariable int userId){
+        List<YouthInfo> list = youthInfoService.getYouthInfoByYouthNameAndUserId(youthName,userId);
+        return R.ok().data("items", list);
+    }
+
+    @ApiOperation("根据孩子姓名查找孩童信息")
+    @PostMapping("/searchYouthInfo")
+    public R findYouthInfoByYouthNameAndUserId(@RequestBody YouthInfoQuery youthInfoQuery){
+        QueryWrapper<YouthInfo> wrapper = new QueryWrapper<>();
+        //组合查询
+        String name = youthInfoQuery.getYouthName();
+        Integer sex = youthInfoQuery.getYouthSex();
+        String nation = youthInfoQuery.getYouthNation();
+        String cardId = youthInfoQuery.getYouthCardId();
+        String begin = youthInfoQuery.getBegin();
+        String end = youthInfoQuery.getEnd();
+        //判断条件，进行拼接
+        if(!StringUtils.isEmpty(name)) {
+            //构建条件
+            wrapper.like("youth_name","%"+name+"%");
+        }
+        if(!StringUtils.isEmpty(sex)) {
+            wrapper.eq("youth_sex",sex);
+        }
+        if(!StringUtils.isEmpty(nation)) {
+            wrapper.like("youth_nation","%"+nation+"%");
+        }
+        if(!StringUtils.isEmpty(cardId)) {
+            wrapper.eq("youth_card_id",cardId);
+        }
+        if(!StringUtils.isEmpty(begin)) {
+            wrapper.ge("create_time",begin);
+        }
+        if(!StringUtils.isEmpty(end)) {
+            wrapper.le("create_time",end);
+        }
+
+        //排序
+        wrapper.orderByDesc("update_time");
+        List<YouthInfo> list = youthInfoService.list(wrapper);
+        return R.ok().data("items", list);
+    }
+
 
     @ApiOperation("所有孩童列表")
     @GetMapping("/findAllYouthInfo")
     public R findAllYouthInfo(){
-        List<YouthInfo> list = youthInfoService.list(null);
+        QueryWrapper<YouthInfo> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("update_time");
+        List<YouthInfo> list = youthInfoService.list(wrapper);
         return R.ok().data("items", list);
     }
 
@@ -139,7 +188,7 @@ public class YouthInfoController {
         }
 
         //排序
-        wrapper.orderByDesc("create_time");
+        wrapper.orderByDesc("update_time");
 
         //调用方法实现条件查询分页
         youthInfoService.page(youthInfoPage,wrapper);
