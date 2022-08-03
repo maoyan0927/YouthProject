@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author maoyan
@@ -56,6 +53,7 @@ public class SlicingController {
     @PutMapping("/uploadSlicingInfo")
     public R upload(@RequestBody Slicing slicing){
         System.out.println(slicing);
+        slicing.setCreateTime(new Date());
         boolean flag = slicingInfoService.updateById(slicing);
         if(flag){
             return R.ok();
