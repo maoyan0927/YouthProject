@@ -62,7 +62,9 @@ public class UserController {
     @ApiOperation("所有用户列表")
     @GetMapping("/findAllUser")
     public R findAllUser(){
-        List<User> list = userService.list(null);
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("update_time");
+        List<User> list = userService.list(wrapper);
         return R.ok().data("items", list);
     }
 

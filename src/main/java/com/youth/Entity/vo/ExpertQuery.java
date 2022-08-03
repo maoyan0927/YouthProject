@@ -10,7 +10,7 @@ public class ExpertQuery {
     private String expertName;
 
     @ApiModelProperty(value = "专家职称")
-    private Integer expertTitle;
+    private String expertTitle;
 
     @ApiModelProperty(value = "专家所在单位")
     private String expertUnit;
