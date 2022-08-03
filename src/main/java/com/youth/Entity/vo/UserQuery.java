@@ -13,6 +13,9 @@ public class UserQuery {
     @ApiModelProperty("用户name")
     private String userName;
 
+    @ApiModelProperty("用户手机号")
+    private String userPhone;
+
     @ApiModelProperty(value = "查询开始时间", example = "2022-07-18 10:12:10")
     private String begin;
 

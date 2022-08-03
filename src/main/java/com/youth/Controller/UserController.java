@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -37,8 +38,20 @@ public class UserController {
     @ApiOperation("添加用户信息")
     @PostMapping("/addUser")
     public R add(@RequestBody User user){
+        user.setCreateTime(new Date());
         boolean save = userService.save(user);
         if(save){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
+
+    @ApiOperation("删除用户信息")
+    @DeleteMapping("/deleteUser/{userId}")
+    public R delete(@PathVariable int userId){
+        boolean success = userService.removeById(userId);
+        if(success){
             return R.ok();
         }else{
             return R.error();
@@ -49,7 +62,9 @@ public class UserController {
     @ApiOperation("所有用户列表")
     @GetMapping("/findAllUser")
     public R findAllUser(){
-        List<User> list = userService.list(null);
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc("update_time");
+        List<User> list = userService.list(wrapper);
         return R.ok().data("items", list);
     }
 
@@ -71,6 +86,38 @@ public class UserController {
             return R.error();
         }
     }
+
+    @ApiOperation("条件查询用户信息")
+    @PostMapping("/searchUser")
+    public R searchUser(@RequestBody UserQuery userQuery){
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        String name = userQuery.getUserName();
+        String phone = userQuery.getUserPhone();
+        String begin = userQuery.getBegin();
+        String end = userQuery.getEnd();
+        //判断条件，进行拼接
+        if(!StringUtils.isEmpty(name)) {
+            //构建条件
+            wrapper.like("user_name","%"+name+"%");
+        }
+        if(!StringUtils.isEmpty(phone)) {
+            //构建条件
+            wrapper.eq("user_phone",phone);
+        }
+        if(!StringUtils.isEmpty(begin)) {
+            wrapper.ge("create_time",begin);
+        }
+        if(!StringUtils.isEmpty(end)) {
+            wrapper.le("create_time",end);
+        }
+
+        //排序
+        wrapper.orderByDesc("update_time");
+        List<User> list = userService.list(wrapper); //数据list集合
+        return R.ok().data("items",list);
+
+    }
+
 
     @ApiOperation("分页查询用户信息")
     @GetMapping("/pageUser/{current}/{limit}")

@@ -17,6 +17,12 @@ public class YouthInfoQuery {
     @ApiModelProperty(value = "孩童性别")
     private Integer youthSex;
 
+    @ApiModelProperty(value = "孩童身份证号")
+    private String youthCardId;
+
+    @ApiModelProperty(value = "孩童民族")
+    private String youthNation;
+
     @ApiModelProperty(value = "查询开始时间", example = "2022-07-18 10:12:10")
     private String begin;
 
