@@ -15,4 +15,7 @@ public interface RecognitionService extends IService<RecognitionResult> {
 
     List<RecognitionResult> getRecognitionBySlicingId(Integer slicingId);
 
+    RecognitionResult getAIRecognitionBySlicingId(Integer slicingId);
+
+    RecognitionResult getExpertRecognitionBySlicingId(Integer slicingId);
 }

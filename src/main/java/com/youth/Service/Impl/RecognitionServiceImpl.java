@@ -1,6 +1,7 @@
 package com.youth.Service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youth.Entity.*;
 import com.youth.Entity.vo.AnalysisParm;
@@ -83,6 +84,24 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
     @Override
     public List<RecognitionResult> getRecognitionBySlicingId(Integer slicingId) {
         return recognitionMapper.getRecognitionBySlicingId(slicingId);
+    }
+
+    @Override
+    public RecognitionResult getAIRecognitionBySlicingId(Integer slicingId) {
+        QueryWrapper<RecognitionResult> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("slicing_id",slicingId);
+        queryWrapper.eq("kind",0);//kind等于0
+        queryWrapper.last("LIMIT 1");
+        return this.getOne(queryWrapper);
+    }
+
+    @Override
+    public RecognitionResult getExpertRecognitionBySlicingId(Integer slicingId) {
+        QueryWrapper<RecognitionResult> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("slicing_id",slicingId);
+        queryWrapper.ne("kind",0);//kind不等于0
+        queryWrapper.last("LIMIT 1");
+        return this.getOne(queryWrapper);
     }
 
     private ResultEnum getSlicePathAndSql(Integer slicingId, Double height, Double weight, Integer youthId) {
