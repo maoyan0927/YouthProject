@@ -51,6 +51,19 @@ public class SlicingController {
         }
     }
 
+
+    @ApiOperation("上传切片信息")
+    @PutMapping("/uploadSlicingInfo")
+    public R upload(@RequestBody Slicing slicing){
+        System.out.println(slicing);
+        boolean flag = slicingInfoService.updateById(slicing);
+        if(flag){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
+
     @ApiOperation("所有图片列表")
     @GetMapping("/findAllSlicing")
     public R findAllSlicing(){
@@ -92,7 +105,7 @@ public class SlicingController {
     }
 
     @ApiOperation("删除图片信息")
-    @GetMapping("/file/deleteDicom")
+    @DeleteMapping ("/file/deleteDicom/{slicingId}")
     public R deleteBySlicingId(@PathVariable Integer slicingId){
         Slicing slicing = slicingInfoService.getById(slicingId);
         String dicomUrl = slicing.getDicomPath();
