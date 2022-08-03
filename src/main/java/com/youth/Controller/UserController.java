@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -37,8 +38,20 @@ public class UserController {
     @ApiOperation("添加用户信息")
     @PostMapping("/addUser")
     public R add(@RequestBody User user){
+        user.setCreateTime(new Date());
         boolean save = userService.save(user);
         if(save){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
+
+    @ApiOperation("删除用户信息")
+    @DeleteMapping("/deleteUser/{userId}")
+    public R delete(@PathVariable int userId){
+        boolean success = userService.removeById(userId);
+        if(success){
             return R.ok();
         }else{
             return R.error();
