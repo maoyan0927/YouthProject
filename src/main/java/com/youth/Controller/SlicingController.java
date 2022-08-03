@@ -109,14 +109,15 @@ public class SlicingController {
     public R deleteBySlicingId(@PathVariable Integer slicingId){
         Slicing slicing = slicingInfoService.getById(slicingId);
         String dicomUrl = slicing.getDicomPath();
-        //此处路径需要更新
-        File file = new File(dicomUrl);
+        String[] temp = dicomUrl.split("/");
+        String deleteByFile = "/home/kth/files/nyouth/output/dicom/"+temp[temp.length-2];
+        File file = new File(deleteByFile);
         Boolean deleteFile = slicingInfoService.deleteFile(file);
         if (!deleteFile){
             return R.deleteDicomError();
         }
         boolean removeById = slicingInfoService.removeById(slicingId);
-        if (!removeById){
+        if (removeById){
             return R.ok();
         }else{
             return R.error();

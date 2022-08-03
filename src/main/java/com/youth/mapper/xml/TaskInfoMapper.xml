@@ -10,6 +10,13 @@
         </set>
         where task_id = #{taskId}
     </update>
+    <select id="NotInVerifyList" parameterType="com.youth.Entity.TaskInfo">
+        select * from task_info where task_info.expert_id != #{expertId}
+    </select>
+
+    <select id="InVerifyList" parameterType="com.youth.Entity.TaskInfo">
+        select * from task_info where task_info.expert_id = #{expertId}
+    </select>
 
 
 </mapper>
