@@ -1,7 +1,6 @@
 package com.youth.Entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,7 +18,7 @@ public class BoneageResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("骨龄预测结果id")
-    @TableId(value = "bone_age_id")
+    @TableId(value = "bone_age_id",type = IdType.AUTO)
     private Integer boneAgeId;
 
     private Integer recoResultId;
@@ -36,8 +35,10 @@ public class BoneageResult implements Serializable {
 
     private String expertSuggestion;
 
+    @TableField(fill = FieldFill.UPDATE)
     private Date createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     private Integer state;

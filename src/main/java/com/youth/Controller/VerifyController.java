@@ -10,12 +10,14 @@ import com.youth.Util.HttpAPIUtil;
 import com.youth.Util.R;
 import com.youth.Util.StringUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,6 +54,33 @@ public class VerifyController {
 
     @Value("${url.heightplot}")
     String heightPlotUrl;
+
+    @ApiOperation("提交审核")
+    @PostMapping("/addVerify")
+    public R addVerify(@RequestBody TaskInfo taskInfo){
+        taskInfo.setState(0);
+        boolean save = taskService.save(taskInfo);
+        if (save){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
+
+    @ApiOperation("未审核列表")
+    @GetMapping("/NotVerifyList")
+    public R NotVerifyList(@PathVariable Integer expertId){
+        List<TaskInfo> notInVerifyList = taskService.NotInVerifyList(expertId);
+        return R.ok().data("notInVerifyList",notInVerifyList);
+    }
+
+    @ApiOperation("专家已审核列表")
+    @GetMapping("/InVerifyList")
+    public R InVerifyList(@PathVariable Integer expertId){
+        List<TaskInfo> inVerifyList = taskService.InVerifyList(expertId);
+        return R.ok().data("inVerifyList",inVerifyList);
+    }
+
 
     @PostMapping("/expertSumbit")
     public R expertSumbit(@RequestBody RecognitionResult recognitionResult,
