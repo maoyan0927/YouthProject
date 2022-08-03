@@ -9,13 +9,13 @@ import lombok.Data;
 @Data
 public class AnalysisParm {
 
-    private Double height;
+    private Double youthHeight;
 
-    private Double weight;
+    private Double youthWeight;
 
     private Integer youthId;
 
     private Integer slicingId;
 
-    private String time;
+    private String physicalTime;
 }
