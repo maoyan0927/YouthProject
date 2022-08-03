@@ -54,6 +54,7 @@ public class SlicingController {
     public R upload(@RequestBody Slicing slicing){
         System.out.println(slicing);
         slicing.setCreateTime(new Date());
+        slicing.setState(1);
         boolean flag = slicingInfoService.updateById(slicing);
         if(flag){
             return R.ok();
