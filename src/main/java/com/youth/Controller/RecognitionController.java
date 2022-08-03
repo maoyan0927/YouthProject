@@ -59,10 +59,10 @@ public class RecognitionController {
             if (slice.getPhysicalTime() == null) {
                 //update
                 SimpleDateFormat sdf = new SimpleDateFormat("mm/DD/yyyy");
-                Date checkTime = sdf.parse(analysisParm.getTime());
+                Date checkTime = sdf.parse(analysisParm.getPhysicalTime());
                 Slicing slicing = new Slicing();
                 slicing.setSlicingId(analysisParm.getSlicingId());
-                slicing.setUpdateTime(checkTime);
+                slicing.setPhysicalTime(checkTime);
                 slicingInfoService.updateById(slicing);
             }
             ResultEnum resultEnum = recognitionService.analysisProcess(analysisParm);

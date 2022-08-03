@@ -72,7 +72,7 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
     public ResultEnum analysisProcess(AnalysisParm analysisParm) {
         try {
             log.info("recogSId:" + analysisParm.getSlicingId());
-            ResultEnum result = getSlicePathAndSql(analysisParm.getSlicingId(), analysisParm.getHeight(), analysisParm.getWeight(), analysisParm.getYouthId());
+            ResultEnum result = getSlicePathAndSql(analysisParm.getSlicingId(), analysisParm.getYouthHeight(), analysisParm.getYouthWeight(), analysisParm.getYouthId());
             return result;
         }catch (Exception e){
             e.printStackTrace();
