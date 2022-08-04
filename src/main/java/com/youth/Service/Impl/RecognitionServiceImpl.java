@@ -100,6 +100,7 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
         QueryWrapper<RecognitionResult> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("slicing_id",slicingId);
         queryWrapper.ne("kind",0);//kind不等于0
+        queryWrapper.orderByDesc("create_time");
         queryWrapper.last("LIMIT 1");
         return this.getOne(queryWrapper);
     }
