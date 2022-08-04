@@ -3,6 +3,7 @@ package com.youth.Controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youth.Entity.*;
 import com.youth.Entity.vo.HisQuery;
+import com.youth.Entity.vo.ReportEntity;
 import com.youth.Service.*;
 import com.youth.Util.R;
 import io.swagger.annotations.Api;
@@ -37,6 +38,9 @@ public class HistoryController {
     @Autowired
     HeightForecastService heightForecastService;
 
+    @Autowired
+    ReportEntityService reportEntityService;
+
 
     @ApiOperation("获取用户历史信息")
     @GetMapping("/getHistoryData/{userId}")
@@ -54,6 +58,7 @@ public class HistoryController {
                         if (slicingList != null) {
                             for (Slicing slicing : slicingList) {
                                 History history = new History();
+                                history.setYouthId(youthInfo.getYouthId());
                                 history.setYouthName(youthInfo.getYouthName());
                                 history.setYouthCardId(youthInfo.getYouthCardId());
                                 history.setSlicingId(slicing.getSlicingId());
@@ -133,6 +138,7 @@ public class HistoryController {
                     if (slicingList != null) {
                         for (Slicing slicing : slicingList) {
                             History history = new History();
+                            history.setYouthId(youthInfo.getYouthId());
                             history.setYouthName(youthInfo.getYouthName());
                             history.setYouthCardId(youthInfo.getYouthCardId());
                             history.setSlicingId(slicing.getSlicingId());
@@ -165,5 +171,18 @@ public class HistoryController {
         }
         return R.error();
     }
+
+    @ApiOperation("根据slicingId查询详细报告")
+    @GetMapping("/details/{slicingId}")
+    public R getDetails(@PathVariable Integer slicingId) {
+
+        QueryWrapper<ReportEntity> reportEntityQueryWrapper = new QueryWrapper<>();
+        reportEntityQueryWrapper.eq("slicing_id",slicingId);
+        reportEntityQueryWrapper.orderByAsc("update_time");
+        List<ReportEntity> list = reportEntityService.list(reportEntityQueryWrapper);
+        return R.ok().data("items", list);
+
+    }
+
 
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 public class ReportEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer recoResultId;
-    private Integer kind;//检测是由谁进行的0-AI 正整数-专家号
+    private String expertName;//检测是由谁进行
     private Integer slicingId;
 
     private String youthName;
@@ -25,9 +25,9 @@ public class ReportEntity implements Serializable {
     private Double youthHeight;
     private Double youthWeight;
 
-    private Double chnBoneAge;
-    private Double tw3BoneAge;
-    private Double twcBoneAge;
+    private Double chnBoneage;
+    private Double tw3Boneage;
+    private Double twcBoneage;
     private String situation;
     private String expertSuggestion;
 
@@ -38,6 +38,6 @@ public class ReportEntity implements Serializable {
     private String growthTrend;
     private String evaluate;
 
-    private Date updateTime;
+    private Date updateTime;//骨龄结果得出时间
 
 }
