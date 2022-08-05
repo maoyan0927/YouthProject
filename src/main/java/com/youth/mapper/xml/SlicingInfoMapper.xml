@@ -10,8 +10,8 @@
         physical_time,
         state
         )value (
-        #{boneDicomPath},
-        #{boneImgPath},
+        #{dicomOriginPath},
+        #{dicomPath},
         #{httpPath},
         #{physicalTime},
         #{state}
