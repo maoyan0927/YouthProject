@@ -90,9 +90,9 @@ public class SlicingController {
                     resMap.put("PhysicalTime", slicing.getPhysicalTime());
                 }
                 resMap.put("code", 1);
-                byte[] encode_bytes = EnDecoderUtil.DESEncrypt(desKey, sliceId + "");
-                String sliceStr = Base64.getEncoder().encodeToString(encode_bytes);
-                resMap.put("sliceId", sliceStr);
+//                byte[] encode_bytes = EnDecoderUtil.DESEncrypt(desKey, sliceId + "");
+//                String sliceStr = Base64.getEncoder().encodeToString(encode_bytes);
+                resMap.put("slicingId", sliceId);
                 resMap.put("HttpPath", slicing.getHttpPath());
             }else {
                 resMap.put("code", 0);
