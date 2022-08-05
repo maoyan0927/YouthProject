@@ -128,10 +128,10 @@ public class HistoryController {
                     QueryWrapper<Slicing> slicingQueryWrapper = new QueryWrapper<>();
 
                     if(!StringUtils.isEmpty(begin)) {
-                        slicingQueryWrapper.ge("create_time",begin);
+                        slicingQueryWrapper.ge("update_time",begin);
                     }
                     if(!StringUtils.isEmpty(end)) {
-                        slicingQueryWrapper.le("create_time",end);
+                        slicingQueryWrapper.le("update_time",end);
                     }
                     slicingQueryWrapper.eq("youth_id",youthId);
                     List<Slicing> slicingList = slicingInfoService.list(slicingQueryWrapper);
