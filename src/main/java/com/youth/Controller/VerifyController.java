@@ -95,12 +95,15 @@ public class VerifyController {
 
     @ApiOperation("专家提交审核")
     @PostMapping("/expertSumbit")
-    public R expertSumbit(@RequestBody RecognitionResult recognitionResult,
-                          @PathVariable Integer expertId){
+    public R expertSubmit(@RequestBody RecognitionResult recognitionResult){
         try{
             Slicing slicing = slicingInfoService.getById(recognitionResult.getSlicingId());
+            slicing.setState(3);
+            boolean b = slicingInfoService.updateById(slicing);
+            if (!b){
+                return R.error().message("切片状态更新失败");
+            }
             recognitionResult.setState(0);
-            recognitionResult.setKind(expertId);//专家识别id
             int recoId = recognitionService.add(recognitionResult);
             if (recoId > 0) {
                 YouthInfo youthInfo = youthInfoService.getById(slicing.getYouthId());
@@ -137,7 +140,7 @@ public class VerifyController {
                         Map<String, Object> heightParam = new HashMap<>();
                         heightParam.put("age",StringUtil.getAge(youthInfo.getYouthBirth(), slicing.getPhysicalTime()));
                         heightParam.put("boneage",Double.parseDouble(data.get("chn_boneage").toString()));
-                        String sexArray[] = {"男", "女"};
+                        String[] sexArray = {"男", "女"};
                         heightParam.put("sex",sexArray[youthInfo.getYouthSex()]);
                         heightParam.put("height",slicing.getYouthHeight());
                         heightParam.put("weight", slicing.getYouthWeight());
@@ -170,7 +173,7 @@ public class VerifyController {
 
     @ApiOperation("专家更新审核")
     @PostMapping("/expertUpdateSumbit")
-    public R expertSumbit(@RequestBody RecognitionResult recognitionResult) throws Exception {
+    public R updateSubmit(@RequestBody RecognitionResult recognitionResult) throws Exception {
         Slicing slicing = slicingInfoService.getById(recognitionResult.getSlicingId());
         boolean updateById = recognitionService.updateById(recognitionResult);
         if(updateById){
@@ -207,7 +210,7 @@ public class VerifyController {
                     Map<String, Object> heightParam = new HashMap<>();
                     heightParam.put("age",StringUtil.getAge(youthInfo.getYouthBirth(), slicing.getPhysicalTime()));
                     heightParam.put("boneage",Double.parseDouble(data.get("chn_boneage").toString()));
-                    String sexArray[] = {"男", "女"};
+                    String[] sexArray = {"男", "女"};
                     heightParam.put("sex",sexArray[youthInfo.getYouthSex()]);
                     heightParam.put("height",slicing.getYouthHeight());
                     heightParam.put("weight", slicing.getYouthWeight());
