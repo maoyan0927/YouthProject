@@ -1,9 +1,14 @@
 package com.youth.Controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youth.Entity.Slicing;
 import com.youth.Entity.YouthInfo;
+import com.youth.Entity.vo.CheckQuery;
+import com.youth.Entity.vo.CheckView;
+import com.youth.Service.CheckViewService;
 import com.youth.Service.SlicingInfoService;
+import com.youth.Service.YouthInfoService;
 import com.youth.Util.EnDecoderUtil;
 import com.youth.Util.R;
 import com.youth.Util.ResultCode;
@@ -13,6 +18,7 @@ import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +39,8 @@ public class SlicingController {
 
     @Autowired
     private SlicingInfoService slicingInfoService;
+    @Autowired
+    private CheckViewService checkViewService;
 
     @Value("${des.key}")
     String desKey;
@@ -138,6 +146,36 @@ public class SlicingController {
         List<Slicing> records = slicingPage.getRecords();
 
         return R.ok().data("total",total).data("rows",records);
+    }
+
+    @ApiOperation("查询待审核列表")
+    @PostMapping("/checking")
+    public R checkingList (@RequestBody CheckQuery checkQuery){
+        QueryWrapper<CheckView> wrapper = new QueryWrapper<>();
+        if (checkQuery == null){
+            List<CheckView> list = checkViewService.list(null);
+            return R.ok().data("items", list);
+        }
+        String name = checkQuery.getYouthName();
+        String cardId = checkQuery.getYouthCardId();
+        String begin = checkQuery.getBegin();
+        String end = checkQuery.getEnd();
+
+        if(!StringUtils.isEmpty(name)) {
+            //构建条件
+            wrapper.like("youth_name","%"+name+"%");
+        }
+        if(!StringUtils.isEmpty(cardId)) {
+            wrapper.eq("youth_card_id",cardId);
+        }
+        if(!StringUtils.isEmpty(begin)) {
+            wrapper.ge("update_time",begin);
+        }
+        if(!StringUtils.isEmpty(end)) {
+            wrapper.le("update_time",end);
+        }
+        List<CheckView> list = checkViewService.list(wrapper);
+        return R.ok().data("items", list);
     }
 
 
