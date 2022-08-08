@@ -11,4 +11,6 @@ public interface RecognitionMapper extends BaseMapper<RecognitionResult> {
     int add(RecognitionResult recognitionResult);
 
     List<RecognitionResult> getRecognitionBySlicingId(Integer slicingId);
+
+    List<RecognitionResult> getInVerifyList(Integer kind);
 }
