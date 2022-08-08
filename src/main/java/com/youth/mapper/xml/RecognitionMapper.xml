@@ -19,4 +19,8 @@
         SELECT * FROM recognition_result WHERE recognition_result.slicing_id = #{slicingId}
     </select>
 
+    <select id="getInVerifyList" resultType="com.youth.Entity.RecognitionResult">
+        SELECT * FROM recognition_result WHERE recognition_result.kind = #{kind}
+    </select>
+
 </mapper>

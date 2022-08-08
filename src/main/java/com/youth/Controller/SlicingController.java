@@ -22,7 +22,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -54,6 +59,17 @@ public class SlicingController {
         }else{
             return R.error();
         }
+    }
+
+    @GetMapping("/getImage")
+    public void getImage(@PathVariable Integer slicingId, HttpServletResponse response) throws IOException{
+        Slicing slicing = slicingInfoService.getById(slicingId);
+        File file = new File(slicing.getHttpPath());
+        BufferedImage image = ImageIO.read(file);
+        response.setHeader("Cache-Control","no-store, no-store");
+        response.setContentType("image/jpg");
+        ServletOutputStream outputStream = response.getOutputStream();
+        ImageIO.write(image, "jpg", outputStream);
     }
 
 
@@ -101,6 +117,7 @@ public class SlicingController {
 //                String sliceStr = Base64.getEncoder().encodeToString(encode_bytes);
                 resMap.put("slicingId", sliceId);
                 resMap.put("HttpPath", slicing.getHttpPath());
+
             }else {
                 resMap.put("code", 0);
             }

@@ -50,7 +50,7 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
     @Value("${url.slice}")
     String sliceUrl;
 
-    @Value("${url.reco}")
+    @Value("${url.newreco}")
     String recoUrl;
 
     @Value("${url.heightplot}")
@@ -84,6 +84,11 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
     @Override
     public List<RecognitionResult> getRecognitionBySlicingId(Integer slicingId) {
         return recognitionMapper.getRecognitionBySlicingId(slicingId);
+    }
+
+    @Override
+    public List<RecognitionResult> getInVerifyList(Integer kind) {
+        return recognitionMapper.getInVerifyList(kind);
     }
 
     @Override
@@ -192,7 +197,7 @@ public class RecognitionServiceImpl extends ServiceImpl<RecognitionMapper, Recog
                         recognization.setYuan3Rank(recoEntity.getData().getYuan3());
                         recognization.setYuan5Rank(recoEntity.getData().getYuan5());
                         recognization.setSlicingId(slicingId);
-                        recognization.setKind(1); //ai
+                        recognization.setKind(0); //ai
                         recognization.setState(0);
                         int recoId = add(recognization);
                         if (recoId > 0){
