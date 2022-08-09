@@ -61,7 +61,7 @@ public class SlicingController {
         }
     }
 
-    @GetMapping("/getImage")
+    @GetMapping("/getImage/{slicingId}")
     public void getImage(@PathVariable Integer slicingId, HttpServletResponse response) throws IOException{
         Slicing slicing = slicingInfoService.getById(slicingId);
         File file = new File(slicing.getHttpPath());
