@@ -35,7 +35,7 @@ public class HeightForecastResult implements Serializable {
 
     private String evaluate;
 
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)

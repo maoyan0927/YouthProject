@@ -150,6 +150,7 @@ public class VerifyController {
                             heightForecastResult.setRecoResultId(recoId);
                             heightForecastResult.setFinalHeightBp(heightEntity.getBp());
                             heightForecastResult.setFinalHeightImprove(heightEntity.getBp2());
+                            heightForecastResult.setStageHeight(heightEntity.getStateheight());
                             heightForecastResult.setGeneticHeight(heightEntity.getTarget());
                             heightForecastResult.setGrowthTrend(StringUtil.jsonArrayToString(heightEntity.getForecast()));
                             heightForecastResult.setEvaluate(heightEntity.getMessage());
@@ -219,6 +220,7 @@ public class VerifyController {
                         HeightForecastResult heightForecastResult = heightForecastService.getHeightByRecoId(recognitionResult.getRecoResultId());
                         heightForecastResult.setFinalHeightBp(heightEntity.getBp());
                         heightForecastResult.setFinalHeightImprove(heightEntity.getBp2());
+                        heightForecastResult.setStageHeight(heightEntity.getStateheight());
                         heightForecastResult.setGeneticHeight(heightEntity.getTarget());
                         heightForecastResult.setGrowthTrend(StringUtil.jsonArrayToString(heightEntity.getForecast()));
                         heightForecastResult.setEvaluate(heightEntity.getMessage());
