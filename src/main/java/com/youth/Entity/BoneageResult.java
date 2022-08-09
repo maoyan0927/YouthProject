@@ -35,7 +35,7 @@ public class BoneageResult implements Serializable {
 
     private String expertSuggestion;
 
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
