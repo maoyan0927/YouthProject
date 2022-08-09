@@ -20,6 +20,8 @@ public class CheckView implements Serializable {
     private String youthId;
     private String youthName;
     private String youthCardId;
+    private Double youthAge;
+    private Date youthBirth;
     private Date physicalTime;
     private Double youthHeight;
     private Double youthWeight;

@@ -2,10 +2,12 @@ package com.youth.Controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youth.Entity.*;
+import com.youth.Entity.vo.HisCheckQuery;
 import com.youth.Entity.vo.HisQuery;
 import com.youth.Entity.vo.ReportEntity;
 import com.youth.Service.*;
 import com.youth.Util.R;
+import com.youth.Util.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
@@ -97,7 +99,7 @@ public class HistoryController {
 
     @ApiOperation("查询用户历史信息")
     @PostMapping("/searchHis")
-    public R searchHis(@RequestBody HisQuery hisQuery){
+    public R searchHis(@RequestBody HisQuery hisQuery) {
         QueryWrapper<YouthInfo> youthInfoQueryWrapper = new QueryWrapper<>();
         String name = hisQuery.getYouthName();
         String cardId = hisQuery.getYouthCardId();
@@ -105,17 +107,17 @@ public class HistoryController {
         String end = hisQuery.getEnd();
         Integer userId = hisQuery.getUserId();
         //判断条件，进行拼接
-        if(!StringUtils.isEmpty(name)) {
+        if (!StringUtils.isEmpty(name)) {
             //构建条件
-            youthInfoQueryWrapper.like("youth_name","%"+name+"%");
+            youthInfoQueryWrapper.like("youth_name", "%" + name + "%");
         }
-        if(!StringUtils.isEmpty(cardId)) {
+        if (!StringUtils.isEmpty(cardId)) {
             //构建条件
-            youthInfoQueryWrapper.eq("youth_card_id",cardId);
+            youthInfoQueryWrapper.eq("youth_card_id", cardId);
         }
-        if(!StringUtils.isEmpty(userId)) {
+        if (!StringUtils.isEmpty(userId)) {
             //构建条件
-            youthInfoQueryWrapper.eq("user_id",userId);
+            youthInfoQueryWrapper.eq("user_id", userId);
         }
         List<History> histories = new ArrayList<>();
         try {
@@ -127,13 +129,13 @@ public class HistoryController {
                     int youthId = youthInfo.getYouthId();
                     QueryWrapper<Slicing> slicingQueryWrapper = new QueryWrapper<>();
 
-                    if(!StringUtils.isEmpty(begin)) {
-                        slicingQueryWrapper.ge("update_time",begin);
+                    if (!StringUtils.isEmpty(begin)) {
+                        slicingQueryWrapper.ge("update_time", begin);
                     }
-                    if(!StringUtils.isEmpty(end)) {
-                        slicingQueryWrapper.le("update_time",end);
+                    if (!StringUtils.isEmpty(end)) {
+                        slicingQueryWrapper.le("update_time", end);
                     }
-                    slicingQueryWrapper.eq("youth_id",youthId);
+                    slicingQueryWrapper.eq("youth_id", youthId);
                     List<Slicing> slicingList = slicingInfoService.list(slicingQueryWrapper);
                     if (slicingList != null) {
                         for (Slicing slicing : slicingList) {
@@ -177,11 +179,156 @@ public class HistoryController {
     public R getDetails(@PathVariable Integer slicingId) {
 
         QueryWrapper<ReportEntity> reportEntityQueryWrapper = new QueryWrapper<>();
-        reportEntityQueryWrapper.eq("slicing_id",slicingId);
-        reportEntityQueryWrapper.orderByAsc("update_time");
+        reportEntityQueryWrapper.eq("slicing_id", slicingId);
+        reportEntityQueryWrapper.orderByDesc("update_time");
         List<ReportEntity> list = reportEntityService.list(reportEntityQueryWrapper);
         return R.ok().data("items", list);
 
+    }
+
+    @ApiOperation("根据slicingId查询简略报告")
+    @GetMapping("/simple/{expertId}")
+    public R getSimple(@PathVariable Integer expertId) {
+        List<History> histories = new ArrayList<>();
+        QueryWrapper<Slicing> slicingQueryWrapper = new QueryWrapper<>();
+        slicingQueryWrapper.gt("state", 2);
+        slicingQueryWrapper.orderByDesc("update_time");
+        List<Slicing> slicingList = slicingInfoService.list(slicingQueryWrapper);
+        for (Slicing slicing : slicingList) {
+            History history = new History();
+            //添加基础信息
+            history.setYouthId(slicing.getYouthId());
+            history.setYouthWeight(slicing.getYouthWeight());
+            history.setYouthHeight(slicing.getYouthHeight());
+            history.setSlicingId(slicing.getSlicingId());
+            history.setPhysicalTime(slicing.getPhysicalTime());
+
+            QueryWrapper<ReportEntity> reportEntityQueryWrapper = new QueryWrapper<>();
+            reportEntityQueryWrapper.eq("slicing_id",slicing.getSlicingId());
+            reportEntityQueryWrapper.eq("expert_id",0);
+            reportEntityQueryWrapper.last("LIMIT 1");
+            ReportEntity reportEntityByAi = reportEntityService.getOne(reportEntityQueryWrapper);
+            //添加基础信息
+            history.setYouthCardId(reportEntityByAi.getYouthCardId());
+            history.setYouthName(reportEntityByAi.getYouthName());
+            history.setYouthSex(reportEntityByAi.getYouthSex()==1?"男":"女");
+            //添加年龄
+            history.setYouthAge(String.format("%.1f",StringUtil.getAge(reportEntityByAi.getYouthBirth(),reportEntityByAi.getPhysicalTime())));
+            //添加AI分数
+            history.setAiScore(reportEntityByAi.getChnBoneage());
+
+
+            QueryWrapper<ReportEntity> reportEntityQueryWrapper1 = new QueryWrapper<>();
+            reportEntityQueryWrapper1.eq("expert_id",expertId);
+            reportEntityQueryWrapper1.eq("slicing_id",slicing.getSlicingId());
+            reportEntityQueryWrapper1.orderByDesc("update_time");
+            ReportEntity reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper1);
+            if (reportEntityByEx == null){
+                QueryWrapper<ReportEntity> reportEntityQueryWrapper2 = new QueryWrapper<>();
+                reportEntityQueryWrapper2.ne("expert_id",0);
+                reportEntityQueryWrapper2.eq("slicing_id",slicing.getSlicingId());
+                reportEntityQueryWrapper2.orderByDesc("update_time");
+                reportEntityQueryWrapper2.last("LIMIT 1");
+                reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper2);
+            }
+            //添加专家打分
+            history.setExpertScore(reportEntityByEx.getChnBoneage());
+            //添加身高预测
+            history.setHeightForecast(reportEntityByEx.getFinalHeightImprove());
+            history.setExpertId(reportEntityByEx.getExpertId());
+            history.setRecoResultId(reportEntityByEx.getRecoResultId());
+            history.setUpdateTime(reportEntityByEx.getUpdateTime());
+            histories.add(history);
+        }
+        return R.ok().data("items", histories);
+    }
+    @ApiOperation("根据搜索信息slicingId查询简略报告")
+    @PostMapping("/simpleQuery")
+    public R querySimple(@RequestBody HisCheckQuery hisCheckQuery) {
+        List<History> histories = new ArrayList<>();
+        String name = hisCheckQuery.getYouthName();
+        String cardId = hisCheckQuery.getYouthCardId();
+        String begin = hisCheckQuery.getBegin();
+        String end = hisCheckQuery.getEnd();
+        Integer expertId = hisCheckQuery.getExpertId();
+        boolean isOnlyMe = hisCheckQuery.getIsOnlyMe();
+        QueryWrapper<YouthInfo> youthInfoQueryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(name)) {
+            //构建条件
+            youthInfoQueryWrapper.like("youth_name", "%" + name + "%");
+        }
+        if (!StringUtils.isEmpty(cardId)) {
+            //构建条件
+            youthInfoQueryWrapper.eq("youth_card_id", cardId);
+        }
+        List<YouthInfo> youthInfos = youthInfoService.list(youthInfoQueryWrapper);
+        List<Slicing> slicingList = new ArrayList<>();
+        for (YouthInfo youthInfo :youthInfos) {
+            QueryWrapper<Slicing> slicingQueryWrapper = new QueryWrapper<>();
+            if (!StringUtils.isEmpty(begin)) {
+                slicingQueryWrapper.ge("update_time", begin);
+            }
+            if (!StringUtils.isEmpty(end)) {
+                slicingQueryWrapper.le("update_time", end);
+            }
+            slicingQueryWrapper.eq("youth_id",youthInfo.getYouthId());
+            slicingQueryWrapper.gt("state", 2);
+            slicingQueryWrapper.orderByDesc("update_time");
+            List<Slicing> slicings = slicingInfoService.list(slicingQueryWrapper);
+            slicingList.addAll(slicings);
+        }
+        for (Slicing slicing : slicingList) {
+            History history = new History();
+            QueryWrapper<ReportEntity> reportEntityQueryWrapper1 = new QueryWrapper<>();
+            reportEntityQueryWrapper1.eq("expert_id",expertId);
+            reportEntityQueryWrapper1.eq("slicing_id",slicing.getSlicingId());
+            reportEntityQueryWrapper1.orderByDesc("update_time");
+            ReportEntity reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper1);
+            if (reportEntityByEx == null){
+                if (isOnlyMe) {
+                    continue;
+                }
+                else {
+                    QueryWrapper<ReportEntity> reportEntityQueryWrapper2 = new QueryWrapper<>();
+                    reportEntityQueryWrapper2.ne("expert_id",0);
+                    reportEntityQueryWrapper2.eq("slicing_id",slicing.getSlicingId());
+                    reportEntityQueryWrapper2.orderByDesc("update_time");
+                    reportEntityQueryWrapper2.last("LIMIT 1");
+                    reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper2);
+                }
+            }
+            //添加专家打分
+            history.setExpertScore(reportEntityByEx.getChnBoneage());
+            //添加身高预测
+            history.setHeightForecast(reportEntityByEx.getFinalHeightImprove());
+            history.setExpertId(reportEntityByEx.getExpertId());
+            history.setRecoResultId(reportEntityByEx.getRecoResultId());
+            history.setUpdateTime(reportEntityByEx.getUpdateTime());
+            //添加基础信息
+            history.setYouthId(slicing.getYouthId());
+            history.setYouthWeight(slicing.getYouthWeight());
+            history.setYouthHeight(slicing.getYouthHeight());
+            history.setSlicingId(slicing.getSlicingId());
+            history.setPhysicalTime(slicing.getPhysicalTime());
+
+            QueryWrapper<ReportEntity> reportEntityQueryWrapper = new QueryWrapper<>();
+            reportEntityQueryWrapper.eq("slicing_id",slicing.getSlicingId());
+            reportEntityQueryWrapper.eq("expert_id",0);
+            reportEntityQueryWrapper.last("LIMIT 1");
+            ReportEntity reportEntityByAi = reportEntityService.getOne(reportEntityQueryWrapper);
+            //添加基础信息
+            history.setYouthCardId(reportEntityByAi.getYouthCardId());
+            history.setYouthName(reportEntityByAi.getYouthName());
+            history.setYouthSex(reportEntityByAi.getYouthSex()==1?"男":"女");
+            //添加年龄
+            history.setYouthAge(String.format("%.1f",StringUtil.getAge(reportEntityByAi.getYouthBirth(),reportEntityByAi.getPhysicalTime())));
+            //添加AI分数
+            history.setAiScore(reportEntityByAi.getChnBoneage());
+
+            histories.add(history);
+
+        }
+        return R.ok().data("items", histories);
     }
 
 

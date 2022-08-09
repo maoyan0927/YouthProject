@@ -1,6 +1,7 @@
 package com.youth.Entity;
 
 import com.youth.Util.EnDecoderUtil;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,11 +22,23 @@ public class History implements Serializable {
 
     private String youthName;
 
+    private String youthSex;
+
     private String youthCardId;
+
+    private Double youthHeight;
+
+    private Double youthWeight;
+
+    private String youthAge;
 
     private Date physicalTime;
 
     private Double aiScore;
+
+    private Integer expertId;
+
+    private Integer recoResultId;
 
     private Double expertScore;
 

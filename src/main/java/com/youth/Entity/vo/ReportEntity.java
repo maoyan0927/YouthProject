@@ -2,6 +2,7 @@ package com.youth.Entity.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,13 +15,15 @@ import java.util.Date;
 public class ReportEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer recoResultId;
+    private Integer expertId;
     private String expertName;//检测是由谁进行
     private Integer slicingId;
 
     private String youthName;
-    private String youthSex;
+    private String youthCardId;
+    private Integer youthSex;
     private String youthNation;
-    private String youthBirth;
+    private Date youthBirth;
     private Date physicalTime;
     private Double youthHeight;
     private Double youthWeight;
