@@ -94,7 +94,7 @@ public class ExpertInfoController {
         }
         if(!StringUtils.isEmpty(title)) {
             //构建条件
-            wrapper.eq("expert_title","%"+title+"%");
+            wrapper.like("expert_title","%"+title+"%");
         }
         if(!StringUtils.isEmpty(begin)) {
             wrapper.ge("create_time",begin);
