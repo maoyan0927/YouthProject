@@ -30,7 +30,10 @@ public class LoginController {
     public R login(@RequestBody LoginForm loginForm){
         if (loginForm.getRole()==1){
             User user = loginService.getUserInfoByUserPhone(loginForm.getUserPhone());
-            System.out.println(user);
+            if(user==null){
+                return R.error().message("账号不存在！");
+            }
+//            System.out.println(user);
             if (loginForm.getUserPassword().equals(user.getUserPassword())){//登录成功
                 user.setUserPassword("");
                 return R.ok().data("user", user).data("userKind",1);
@@ -39,6 +42,9 @@ public class LoginController {
             }
         }else if (loginForm.getRole()==2){
             ExpertInfo expertInfo = loginService.getExpertInfoByPhone(loginForm.getUserPhone());
+            if(expertInfo==null){
+                return R.error().message("账号不存在！");
+            }
             if (loginForm.getUserPassword().equals(expertInfo.getExpertPassword())){//登录成功
                 expertInfo.setExpertPassword("");
                 return R.ok().data("expertInfo",expertInfo).data("userKind",2);
@@ -48,6 +54,9 @@ public class LoginController {
         }else if (loginForm.getRole()==3){
             //TODO:读管理员表
             AdminInfo adminInfo = loginService.getAdminInfoByAccount(loginForm.getUserPhone());
+            if (adminInfo==null){
+                return R.error().message("账号不存在！");
+            }
             if (loginForm.getUserPhone().equals(adminInfo.getAdminAccount())){
                 adminInfo.setAdminPassword("");
                 return R.ok().data("adminInfo",adminInfo).data("userKind",3);

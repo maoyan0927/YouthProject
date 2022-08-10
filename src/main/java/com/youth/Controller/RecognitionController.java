@@ -58,7 +58,7 @@ public class RecognitionController {
             Slicing slice = slicingInfoService.getById(analysisParm.getSlicingId());
             if (slice.getPhysicalTime() == null) {
                 //update
-                SimpleDateFormat sdf = new SimpleDateFormat("mm/DD/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                 Date checkTime = sdf.parse(analysisParm.getPhysicalTime());
                 Slicing slicing = new Slicing();
                 slicing.setSlicingId(analysisParm.getSlicingId());
