@@ -114,6 +114,7 @@ public class ExpertInfoController {
     public R findAllExpertInfo(){
         QueryWrapper<ExpertInfo> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("update_time");
+        wrapper.ne("expert_id",0);
         List<ExpertInfo> list = expertInfoService.list(wrapper);
         return R.ok().data("items", list);
     }
