@@ -118,4 +118,18 @@ public class ExpertInfoController {
         List<ExpertInfo> list = expertInfoService.list(wrapper);
         return R.ok().data("items", list);
     }
+
+    @ApiOperation("修改专家密码和手机")
+    @PostMapping("/updatePasswordAndPhone")
+    public R searchUser(@RequestBody ExpertInfo expertInfo){
+        ExpertInfo ori = expertInfoService.getById(expertInfo.getExpertId());
+        ori.setExpertPassword(expertInfo.getExpertPassword());
+        ori.setExpertPhone(expertInfo.getExpertPhone());
+        boolean b = expertInfoService.updateById(ori);
+        if (b){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
 }
