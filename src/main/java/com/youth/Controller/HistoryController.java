@@ -182,7 +182,17 @@ public class HistoryController {
         reportEntityQueryWrapper.eq("slicing_id", slicingId);
         reportEntityQueryWrapper.orderByDesc("update_time");
         List<ReportEntity> list = reportEntityService.list(reportEntityQueryWrapper);
-        return R.ok().data("items", list);
+        List<Curve> curveList = new ArrayList<>();
+        for (ReportEntity r : list) {
+            Curve curve = new Curve();
+            List<List<Float>> point = StringUtil.stringToArray(r != null ? r.getGrowthTrend() : null);
+            curve.setBp(r != null ? r.getFinalHeightBp() : null);
+            curve.setBp2(r != null ? r.getFinalHeightImprove() : null);
+            curve.setTarget(r != null ? r.getGeneticHeight() : null);
+            curve.setPoints(point);
+            curveList.add(curve);
+        }
+        return R.ok().data("items", list).data("dialogData", curveList);
 
     }
 
@@ -204,29 +214,29 @@ public class HistoryController {
             history.setPhysicalTime(slicing.getPhysicalTime());
 
             QueryWrapper<ReportEntity> reportEntityQueryWrapper = new QueryWrapper<>();
-            reportEntityQueryWrapper.eq("slicing_id",slicing.getSlicingId());
-            reportEntityQueryWrapper.eq("expert_id",0);
+            reportEntityQueryWrapper.eq("slicing_id", slicing.getSlicingId());
+            reportEntityQueryWrapper.eq("expert_id", 0);
             reportEntityQueryWrapper.last("LIMIT 1");
             ReportEntity reportEntityByAi = reportEntityService.getOne(reportEntityQueryWrapper);
             //添加基础信息
             history.setYouthCardId(reportEntityByAi.getYouthCardId());
             history.setYouthName(reportEntityByAi.getYouthName());
-            history.setYouthSex(reportEntityByAi.getYouthSex()==1?"男":"女");
+            history.setYouthSex(reportEntityByAi.getYouthSex() == 1 ? "男" : "女");
             //添加年龄
-            history.setYouthAge(String.format("%.1f",StringUtil.getAge(reportEntityByAi.getYouthBirth(),reportEntityByAi.getPhysicalTime())));
+            history.setYouthAge(String.format("%.1f", StringUtil.getAge(reportEntityByAi.getYouthBirth(), reportEntityByAi.getPhysicalTime())));
             //添加AI分数
             history.setAiScore(reportEntityByAi.getChnBoneage());
 
 
             QueryWrapper<ReportEntity> reportEntityQueryWrapper1 = new QueryWrapper<>();
-            reportEntityQueryWrapper1.eq("expert_id",expertId);
-            reportEntityQueryWrapper1.eq("slicing_id",slicing.getSlicingId());
+            reportEntityQueryWrapper1.eq("expert_id", expertId);
+            reportEntityQueryWrapper1.eq("slicing_id", slicing.getSlicingId());
             reportEntityQueryWrapper1.orderByDesc("update_time");
             ReportEntity reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper1);
-            if (reportEntityByEx == null){
+            if (reportEntityByEx == null) {
                 QueryWrapper<ReportEntity> reportEntityQueryWrapper2 = new QueryWrapper<>();
-                reportEntityQueryWrapper2.ne("expert_id",0);
-                reportEntityQueryWrapper2.eq("slicing_id",slicing.getSlicingId());
+                reportEntityQueryWrapper2.ne("expert_id", 0);
+                reportEntityQueryWrapper2.eq("slicing_id", slicing.getSlicingId());
                 reportEntityQueryWrapper2.orderByDesc("update_time");
                 reportEntityQueryWrapper2.last("LIMIT 1");
                 reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper2);
@@ -242,6 +252,7 @@ public class HistoryController {
         }
         return R.ok().data("items", histories);
     }
+
     @ApiOperation("根据搜索信息slicingId查询简略报告")
     @PostMapping("/simpleQuery")
     public R querySimple(@RequestBody HisCheckQuery hisCheckQuery) {
@@ -263,7 +274,7 @@ public class HistoryController {
         }
         List<YouthInfo> youthInfos = youthInfoService.list(youthInfoQueryWrapper);
         List<Slicing> slicingList = new ArrayList<>();
-        for (YouthInfo youthInfo :youthInfos) {
+        for (YouthInfo youthInfo : youthInfos) {
             QueryWrapper<Slicing> slicingQueryWrapper = new QueryWrapper<>();
             if (!StringUtils.isEmpty(begin)) {
                 slicingQueryWrapper.ge("update_time", begin);
@@ -271,7 +282,7 @@ public class HistoryController {
             if (!StringUtils.isEmpty(end)) {
                 slicingQueryWrapper.le("update_time", end);
             }
-            slicingQueryWrapper.eq("youth_id",youthInfo.getYouthId());
+            slicingQueryWrapper.eq("youth_id", youthInfo.getYouthId());
             slicingQueryWrapper.gt("state", 2);
             slicingQueryWrapper.orderByDesc("update_time");
             List<Slicing> slicings = slicingInfoService.list(slicingQueryWrapper);
@@ -280,18 +291,17 @@ public class HistoryController {
         for (Slicing slicing : slicingList) {
             History history = new History();
             QueryWrapper<ReportEntity> reportEntityQueryWrapper1 = new QueryWrapper<>();
-            reportEntityQueryWrapper1.eq("expert_id",expertId);
-            reportEntityQueryWrapper1.eq("slicing_id",slicing.getSlicingId());
+            reportEntityQueryWrapper1.eq("expert_id", expertId);
+            reportEntityQueryWrapper1.eq("slicing_id", slicing.getSlicingId());
             reportEntityQueryWrapper1.orderByDesc("update_time");
             ReportEntity reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper1);
-            if (reportEntityByEx == null){
+            if (reportEntityByEx == null) {
                 if (isOnlyMe) {
                     continue;
-                }
-                else {
+                } else {
                     QueryWrapper<ReportEntity> reportEntityQueryWrapper2 = new QueryWrapper<>();
-                    reportEntityQueryWrapper2.ne("expert_id",0);
-                    reportEntityQueryWrapper2.eq("slicing_id",slicing.getSlicingId());
+                    reportEntityQueryWrapper2.ne("expert_id", 0);
+                    reportEntityQueryWrapper2.eq("slicing_id", slicing.getSlicingId());
                     reportEntityQueryWrapper2.orderByDesc("update_time");
                     reportEntityQueryWrapper2.last("LIMIT 1");
                     reportEntityByEx = reportEntityService.getOne(reportEntityQueryWrapper2);
@@ -312,16 +322,16 @@ public class HistoryController {
             history.setPhysicalTime(slicing.getPhysicalTime());
 
             QueryWrapper<ReportEntity> reportEntityQueryWrapper = new QueryWrapper<>();
-            reportEntityQueryWrapper.eq("slicing_id",slicing.getSlicingId());
-            reportEntityQueryWrapper.eq("expert_id",0);
+            reportEntityQueryWrapper.eq("slicing_id", slicing.getSlicingId());
+            reportEntityQueryWrapper.eq("expert_id", 0);
             reportEntityQueryWrapper.last("LIMIT 1");
             ReportEntity reportEntityByAi = reportEntityService.getOne(reportEntityQueryWrapper);
             //添加基础信息
             history.setYouthCardId(reportEntityByAi.getYouthCardId());
             history.setYouthName(reportEntityByAi.getYouthName());
-            history.setYouthSex(reportEntityByAi.getYouthSex()==1?"男":"女");
+            history.setYouthSex(reportEntityByAi.getYouthSex() == 1 ? "男" : "女");
             //添加年龄
-            history.setYouthAge(String.format("%.1f",StringUtil.getAge(reportEntityByAi.getYouthBirth(),reportEntityByAi.getPhysicalTime())));
+            history.setYouthAge(String.format("%.1f", StringUtil.getAge(reportEntityByAi.getYouthBirth(), reportEntityByAi.getPhysicalTime())));
             //添加AI分数
             history.setAiScore(reportEntityByAi.getChnBoneage());
 
